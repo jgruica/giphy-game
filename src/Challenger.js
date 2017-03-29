@@ -8,7 +8,9 @@ class Challenger extends Component {
         this.state = {
             value: '',
             searchResultImages: [],
-            isHit: null
+            isHit: null,
+            countHit: 0,
+            countMiss: 0
         };
     }
 
@@ -21,9 +23,18 @@ class Challenger extends Component {
             const searchResultImages = response.data.map(giphy => giphy.images.original.url);
             const isHit = searchResultImages.includes(this.props.challengeImageUrl);
 
+
+            if(isHit === true){
+              this.state.countHit++;
+            }
+            if(isHit === false){
+              this.state.countMiss++;
+
+            }
+
             this.setState({
                 searchResultImages: searchResultImages,
-                isHit: isHit
+                isHit: isHit,
             });
         });
     }
@@ -37,6 +48,8 @@ class Challenger extends Component {
             <div>
                 <p><input type="text" value={this.state.value} onChange={this.handleChange} /></p>
                 <p><button onClick={this.buttonClicked}>Check</button></p>
+                <p> Counter Hit: {this.state.countHit} </p>
+                <p> Counter Miss: {this.state.countMiss} </p>
                 { this.state.isHit === true && <h1>HIT!</h1> }
                 { this.state.isHit === false && <h1>MISS!</h1> }
                 <div>
